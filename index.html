@@ -28,9 +28,24 @@ header{
 }
 
 .menu-btn{
-  font-size:30px;
+  font-size:26px;
   cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-weight:bold;
 }
+
+.menu-icon span{
+  display:block;
+  width:25px;
+  height:3px;
+  margin:4px 0;
+}
+
+.menu-icon span:nth-child(1){ background:#ff7a00; }
+.menu-icon span:nth-child(2){ background:#1faa59; }
+.menu-icon span:nth-child(3){ background:#e10600; }
 
 /* HERO */
 .hero{
@@ -83,47 +98,96 @@ cursor:pointer;
   text-decoration:none;
 }
 
-/* LOGIN MODAL */
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.4);
-  display:none;
-  justify-content:center;
-  align-items:center;
-  z-index:20;
+/* LOGIN PAGE */
+.login-page{
+display:none;
+padding:40px 20px;
+background:#0a4c57;
+min-height:100vh;
 }
 
 .login-box{
-  background:#fff;
-  width:90%;
-  max-width:360px;
-  padding:25px;
-  border-radius:14px;
+background:#fff;
+max-width:400px;
+margin:auto;
+padding:25px;
+border-radius:20px;
 }
 
 .login-box h2{
-  color:var(--red);
-  text-align:center;
-  margin-bottom:15px;
+text-align:center;
+margin-bottom:10px;
+color:var(--red);
 }
 
 .login-box input{
-  width:100%;
-  padding:12px;
-  margin-bottom:15px;
-  border:1px solid #ddd;
-  border-radius:8px;
+width:100%;
+padding:12px;
+margin-bottom:15px;
+border:1px solid #ddd;
+border-radius:8px;
 }
 
 .login-box button{
-  width:100%;
-  padding:12px;
-  border:none;
-  background:var(--green);
-  color:#fff;
-  font-size:16px;
-  border-radius:8px;
+width:100%;
+padding:14px;
+border:none;
+background:var(--green);
+color:#fff;
+font-size:16px;
+border-radius:8px;
+}
+
+.login-links{
+display:flex;
+justify-content:space-between;
+margin-top:10px;
+font-size:14px;
+}
+
+/* REGISTER PAGE */
+.register-page{
+display:none;
+padding:40px 20px;
+background:#0a4c57;
+min-height:100vh;
+}
+
+.register-box{
+background:#fff;
+max-width:400px;
+margin:auto;
+padding:25px;
+border-radius:20px;
+}
+
+.register-box h2{
+text-align:center;
+margin-bottom:10px;
+}
+
+.register-box p{
+text-align:center;
+color:#777;
+margin-bottom:20px;
+}
+
+.register-box input{
+width:100%;
+padding:12px;
+margin-bottom:15px;
+border:1px solid #ddd;
+border-radius:8px;
+}
+
+.register-btn{
+width:100%;
+padding:14px;
+background:linear-gradient(90deg,#ffb066,#ff7a00);
+border:none;
+color:#fff;
+font-size:16px;
+border-radius:8px;
 }
 </style>
 </head>
@@ -131,47 +195,108 @@ cursor:pointer;
 <body>
 
 <header>
-  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+<div class="menu-btn" onclick="toggleMenu()">
+<div class="menu-icon">
+<span></span>
+<span></span>
+<span></span>
+</div>
+MENU
+</div>
 </header>
 
-<section class="hero">
+<section class="hero" id="hero">
 <h1>A Better Way To Collect Payments</h1>
 <p>Our system has simplified how customers get movies and affordable data with ease.</p>
-<button class="start-btn" onclick="window.location.href='register.html'">Create Free Account</button>
+<button class="start-btn" onclick="openRegister()">Create Free Account</button>
+</section>
+
+<!-- LOGIN PAGE -->
+<section class="login-page" id="loginPage">
+
+<div class="login-box">
+
+<h2>Login</h2>
+
+<input placeholder="Username">
+<input type="password" placeholder="Password">
+
+<button>Sign In</button>
+
+<div class="login-links">
+<a href="#">Forget Password?</a>
+<a href="#" onclick="openRegister()">Create Account</a>
+</div>
+
+</div>
+
+</section>
+
+<!-- REGISTER PAGE -->
+<section class="register-page" id="registerPage">
+
+<div class="register-box">
+
+<h2>Create account</h2>
+<p>Let's get you started with your account.</p>
+
+<input placeholder="First Name">
+<input placeholder="Last Name">
+<input placeholder="Phone Number">
+<input placeholder="Email Address">
+<input type="password" placeholder="Password">
+<input type="password" placeholder="Confirm Password">
+
+<label style="font-size:14px">
+<input type="checkbox"> I accept terms
+</label>
+
+<button class="register-btn">Create my account</button>
+
+<p style="margin-top:15px;text-align:center">
+Already have an account? 
+<a href="#" onclick="openLogin()">Log In</a>
+</p>
+
+</div>
+
 </section>
 
 <div class="side-menu" id="menu">
-  <a href="index.html">Home</a>
-  <a href="#">Dashboard</a>
-  <a href="#">About</a>
-  <a href="#" onclick="openLogin()">Login</a>
-  <a href="register.html">Register</a>
-</div>
-
-<div class="modal" id="loginModal" onclick="closeLogin(event)">
-  <div class="login-box">
-    <h2>Login</h2>
-    <input placeholder="Username">
-    <input type="password" placeholder="Password">
-    <button>Sign In</button>
-  </div>
+<a href="#">Home</a>
+<a href="#">Dashboard</a>
+<a href="#">About</a>
+<a href="#" onclick="openLogin()">Login</a>
+<a href="#" onclick="openRegister()">Register</a>
 </div>
 
 <script>
+
 function toggleMenu(){
-  const m = document.getElementById("menu");
-  m.style.right = (m.style.right==="0px") ? "-70%" : "0px";
+const m = document.getElementById("menu");
+m.style.right = (m.style.right==="0px") ? "-70%" : "0px";
 }
 
 function openLogin(){
-  document.getElementById("loginModal").style.display="flex";
-  document.getElementById("menu").style.right="-70%";
+document.getElementById("hero").style.display="none";
+document.getElementById("registerPage").style.display="none";
+document.getElementById("loginPage").style.display="block";
+document.getElementById("menu").style.right="-70%";
 }
 
-function closeLogin(e){
-  if(e.target.id==="loginModal")
-    e.target.style.display="none";
+function openRegister(){
+document.getElementById("hero").style.display="none";
+document.getElementById("loginPage").style.display="none";
+document.getElementById("registerPage").style.display="block";
+document.getElementById("menu").style.right="-70%";
 }
+
+function backHome(){
+document.getElementById("registerPage").style.display="none";
+document.getElementById("loginPage").style.display="none";
+document.getElementById("hero").style.display="block";
+}
+
 </script>
 
 </body>
