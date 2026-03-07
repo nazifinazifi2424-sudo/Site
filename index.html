@@ -225,7 +225,6 @@ MENU
 <button class="start-btn" onclick="openRegister()">Create Free Account</button>
 </section>
 
-<!-- LOGIN PAGE -->
 <section class="login-page" id="loginPage">
 
 <div class="login-box">
@@ -246,7 +245,6 @@ MENU
 
 </section>
 
-<!-- REGISTER PAGE -->
 <section class="register-page" id="registerPage">
 
 <div class="register-box">
@@ -319,8 +317,6 @@ document.getElementById("loginPage").style.display="none";
 document.getElementById("hero").style.display="block";
 }
 
-/* PASSWORD CHECK */
-
 const password = document.getElementById("password")
 const strength = document.getElementById("strength")
 
@@ -343,8 +339,6 @@ strength.innerHTML="<span class='error'>Use uppercase, lowercase and number</spa
 }
 
 })
-
-/* REGISTER SUBMIT */
 
 document.getElementById("registerForm").addEventListener("submit",async function(e){
 
@@ -379,6 +373,8 @@ body:JSON.stringify(data)
 const result = await res.json()
 
 alert(result.message)
+
+window.location = "verify.html"
 
 })
 
