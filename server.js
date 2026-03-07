@@ -174,3 +174,46 @@ await db.query("SELECT 1")
 }catch(e){}
 
 },300000)
+
+
+/* ===============================
+VERIFY OTP API
+=============================== */
+
+app.post("/verify-otp", async (req,res)=>{
+
+try{
+
+const {email,otp} = req.body
+
+const db = getConn()
+
+const result = await db.query(
+`SELECT otp FROM users WHERE email=$1`,
+[email]
+)
+
+if(result.rows.length === 0){
+return res.json({success:false,message:"User not found"})
+}
+
+const dbOtp = result.rows[0].otp
+
+if(dbOtp !== otp){
+return res.json({success:false,message:"Invalid OTP"})
+}
+
+await db.query(
+`UPDATE users SET verified=true WHERE email=$1`,
+[email]
+)
+
+res.json({success:true,message:"Account verified successfully"})
+
+}catch(e){
+
+res.json({success:false,message:"Verification error"})
+
+}
+
+})
