@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Email Verification</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+font-family:Arial;
+background:#0a4c57;
+display:flex;
+align-items:center;
+justify-content:center;
+height:100vh;
+margin:0;
+}
+
+.box{
+background:#fff;
+padding:30px;
+border-radius:15px;
+width:350px;
+text-align:center;
+}
+
+h2{
+margin-bottom:10px;
+color:#e10600;
+}
+
+p{
+color:#777;
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:12px;
+border:1px solid #ddd;
+border-radius:8px;
+margin-bottom:15px;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#1faa59;
+border:none;
+color:white;
+font-size:16px;
+border-radius:8px;
+cursor:pointer;
+}
+
+button:hover{
+opacity:.9;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>Email Verification</h2>
+
+<p>Enter the OTP sent to your email</p>
+
+<input id="email" placeholder="Enter your email">
+
+<input id="otp" placeholder="Enter OTP">
+
+<button onclick="verifyOTP()">Verify</button>
+
+</div>
+
+<script>
+
+async function verifyOTP(){
+
+const email=document.getElementById("email").value
+const otp=document.getElementById("otp").value
+
+const res=await fetch("/verify-otp",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({email,otp})
+
+})
+
+const data=await res.json()
+
+alert(data.message)
+
+if(data.success){
+
+window.location.href="/"
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
