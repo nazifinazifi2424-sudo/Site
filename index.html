@@ -189,6 +189,20 @@ color:#fff;
 font-size:16px;
 border-radius:8px;
 }
+
+.password-strength{
+font-size:13px;
+margin-bottom:10px;
+}
+
+.error{
+color:red;
+font-size:13px;
+}
+.success{
+color:green;
+font-size:13px;
+}
 </style>
 </head>
 
@@ -240,19 +254,26 @@ MENU
 <h2>Create account</h2>
 <p>Let's get you started with your account.</p>
 
-<input placeholder="First Name">
-<input placeholder="Last Name">
-<input placeholder="Username">
-<input placeholder="Phone Number">
-<input placeholder="Email Address">
-<input type="password" placeholder="Password">
-<input type="password" placeholder="Confirm Password">
+<form id="registerForm">
+
+<input name="firstName" placeholder="First Name" required>
+<input name="lastName" placeholder="Last Name" required>
+<input name="username" placeholder="Username" required>
+<input name="phone" placeholder="Phone Number" required>
+<input name="email" type="email" placeholder="Email Address" required>
+
+<input id="password" name="password" type="password" placeholder="Password" required>
+<div id="strength" class="password-strength"></div>
+
+<input id="confirmPassword" type="password" placeholder="Confirm Password" required>
 
 <label style="font-size:14px">
-<input type="checkbox"> I accept terms
+<input type="checkbox" id="terms"> I accept terms
 </label>
 
 <button class="register-btn">Create my account</button>
+
+</form>
 
 <p style="margin-top:15px;text-align:center">
 Already have an account? 
@@ -297,6 +318,69 @@ document.getElementById("registerPage").style.display="none";
 document.getElementById("loginPage").style.display="none";
 document.getElementById("hero").style.display="block";
 }
+
+/* PASSWORD CHECK */
+
+const password = document.getElementById("password")
+const strength = document.getElementById("strength")
+
+password.addEventListener("input",function(){
+
+const value = password.value
+
+const hasUpper = /[A-Z]/.test(value)
+const hasLower = /[a-z]/.test(value)
+const hasNumber = /[0-9]/.test(value)
+
+if(value.length < 6){
+strength.innerHTML="<span class='error'>Weak password</span>"
+}
+else if(hasUpper && hasLower && hasNumber){
+strength.innerHTML="<span class='success'>Strong password</span>"
+}
+else{
+strength.innerHTML="<span class='error'>Use uppercase, lowercase and number</span>"
+}
+
+})
+
+/* REGISTER SUBMIT */
+
+document.getElementById("registerForm").addEventListener("submit",async function(e){
+
+e.preventDefault()
+
+const terms=document.getElementById("terms")
+
+if(!terms.checked){
+alert("You must accept the terms")
+return
+}
+
+const pass=document.getElementById("password").value
+const confirm=document.getElementById("confirmPassword").value
+
+if(pass!==confirm){
+alert("Passwords do not match")
+return
+}
+
+const formData = new FormData(this)
+const data = Object.fromEntries(formData)
+
+const res = await fetch("/register",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify(data)
+})
+
+const result = await res.json()
+
+alert(result.message)
+
+})
 
 </script>
 
