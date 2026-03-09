@@ -269,7 +269,8 @@ MENU
 <input type="checkbox" id="terms"> I accept terms
 </label>
 
-<button class="register-btn">Create my account</button>
+<!-- FIXED BUTTON -->
+<button type="submit" class="register-btn">Create my account</button>
 
 </form>
 
@@ -293,11 +294,13 @@ Already have an account?
 <script>
 
 function toggleMenu(){
+console.log("DEBUG: Menu toggled")
 const m = document.getElementById("menu");
 m.style.right = (m.style.right==="0px") ? "-70%" : "0px";
 }
 
 function openLogin(){
+console.log("DEBUG: Open login page")
 document.getElementById("hero").style.display="none";
 document.getElementById("registerPage").style.display="none";
 document.getElementById("loginPage").style.display="block";
@@ -305,6 +308,7 @@ document.getElementById("menu").style.right="-70%";
 }
 
 function openRegister(){
+console.log("DEBUG: Open register page")
 document.getElementById("hero").style.display="none";
 document.getElementById("loginPage").style.display="none";
 document.getElementById("registerPage").style.display="block";
@@ -312,6 +316,7 @@ document.getElementById("menu").style.right="-70%";
 }
 
 function backHome(){
+console.log("DEBUG: Back to home")
 document.getElementById("registerPage").style.display="none";
 document.getElementById("loginPage").style.display="none";
 document.getElementById("hero").style.display="block";
@@ -342,6 +347,8 @@ strength.innerHTML="<span class='error'>Use uppercase, lowercase and number</spa
 
 document.getElementById("registerForm").addEventListener("submit",async function(e){
 
+console.log("DEBUG: Register button clicked")
+
 e.preventDefault()
 
 const terms=document.getElementById("terms")
@@ -362,7 +369,11 @@ return
 const formData = new FormData(this)
 const data = Object.fromEntries(formData)
 
+console.log("DEBUG: Form data collected",data)
+
 try{
+
+console.log("DEBUG: Sending request to /register")
 
 const res = await fetch("/register",{
 method:"POST",
@@ -372,15 +383,23 @@ headers:{
 body:JSON.stringify(data)
 })
 
+console.log("DEBUG: Waiting server response")
+
 const result = await res.json()
+
+console.log("DEBUG: Server response",result)
 
 alert(result.message)
 
-if(result.message){
+/* FIXED REDIRECT */
+if(result.message === "Account created. OTP sent to your email."){
+console.log("DEBUG: Redirecting to verify page")
 window.location = "verify.html"
 }
 
 }catch(err){
+
+console.log("DEBUG: Frontend error",err)
 
 alert("Server error. Try again.")
 
