@@ -362,6 +362,8 @@ return
 const formData = new FormData(this)
 const data = Object.fromEntries(formData)
 
+try{
+
 const res = await fetch("/register",{
 method:"POST",
 headers:{
@@ -374,9 +376,15 @@ const result = await res.json()
 
 alert(result.message)
 
-window.location = "verify.html"
+if(result.message){
+window.location="verify.html"
+}
 
-})
+}catch(err){
+
+alert("Server error. Try again.")
+
+}
 
 </script>
 
