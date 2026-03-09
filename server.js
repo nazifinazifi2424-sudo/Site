@@ -5,13 +5,14 @@ const app = express()
 app.use(express.static("."))
 
 app.get("/", (req,res)=>{
+console.log("DEBUG: Home page requested")
 res.sendFile(__dirname + "/index.html")
 })
 
 const PORT = process.env.PORT || 3000
 
 app.listen(PORT, ()=>{
-console.log("Server running")
+console.log("DEBUG: Server running on port " + PORT)
 })
 
 /* ===============================
@@ -25,6 +26,8 @@ let pool
 function getConn(){
 
 if(!pool){
+
+console.log("DEBUG: Creating database connection")
 
 pool = new Pool({
 connectionString:process.env.DATABASE_URL,
@@ -44,6 +47,8 @@ async function createTable(){
 
 try{
 
+console.log("DEBUG: Checking/Creating users table")
+
 const db = getConn()
 
 await db.query(`
@@ -61,11 +66,11 @@ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
 `)
 
-console.log("Users table ready")
+console.log("DEBUG: Users table ready")
 
 }catch(e){
 
-console.log("Table error",e)
+console.log("DEBUG: Table creation error",e)
 
 }
 
@@ -85,7 +90,11 @@ OTP GENERATOR
 
 function generateOTP(){
 
-return Math.floor(100000 + Math.random()*900000).toString()
+const otp = Math.floor(100000 + Math.random()*900000).toString()
+
+console.log("DEBUG: Generated OTP:",otp)
+
+return otp
 
 }
 
@@ -94,6 +103,8 @@ EMAIL SENDER
 =============================== */
 
 const nodemailer = require("nodemailer")
+
+console.log("DEBUG: Preparing email transporter")
 
 const transporter = nodemailer.createTransport({
 
@@ -112,13 +123,19 @@ REGISTER API
 
 app.post("/register", async (req,res)=>{
 
+console.log("DEBUG: /register API called")
+
 try{
 
 const {firstName,lastName,username,phone,email,password} = req.body
 
+console.log("DEBUG: Received data:",firstName,lastName,username,phone,email)
+
 const otp = generateOTP()
 
 const db = getConn()
+
+console.log("DEBUG: Inserting user into database")
 
 await db.query(
 
@@ -129,6 +146,10 @@ VALUES ($1,$2,$3,$4,$5,$6,$7)`,
 [firstName,lastName,username,phone,email,password,otp]
 
 )
+
+console.log("DEBUG: User inserted successfully")
+
+console.log("DEBUG: Sending OTP email to:",email)
 
 await transporter.sendMail({
 
@@ -147,11 +168,13 @@ html:`
 
 })
 
+console.log("DEBUG: OTP email sent successfully")
+
 res.json({message:"Account created. OTP sent to your email."})
 
 }catch(err){
 
-console.log(err)
+console.log("DEBUG: REGISTER ERROR:",err)
 
 res.json({message:"Error creating account"})
 
@@ -167,11 +190,19 @@ setInterval(async ()=>{
 
 try{
 
+console.log("DEBUG: Waking database")
+
 const db = getConn()
 
 await db.query("SELECT 1")
 
-}catch(e){}
+console.log("DEBUG: Database awake")
+
+}catch(e){
+
+console.log("DEBUG: Wake DB error",e)
+
+}
 
 },300000)
 
@@ -182,9 +213,13 @@ VERIFY OTP API
 
 app.post("/verify-otp", async (req,res)=>{
 
+console.log("DEBUG: /verify-otp API called")
+
 try{
 
 const {email,otp} = req.body
+
+console.log("DEBUG: Verifying email:",email,"OTP:",otp)
 
 const db = getConn()
 
@@ -193,13 +228,19 @@ const result = await db.query(
 [email]
 )
 
+console.log("DEBUG: Database query result:",result.rows)
+
 if(result.rows.length === 0){
+console.log("DEBUG: User not found")
 return res.json({success:false,message:"User not found"})
 }
 
 const dbOtp = result.rows[0].otp
 
+console.log("DEBUG: DB OTP:",dbOtp)
+
 if(dbOtp !== otp){
+console.log("DEBUG: Invalid OTP entered")
 return res.json({success:false,message:"Invalid OTP"})
 }
 
@@ -208,9 +249,13 @@ await db.query(
 [email]
 )
 
+console.log("DEBUG: Account verified successfully")
+
 res.json({success:true,message:"Account verified successfully"})
 
 }catch(e){
+
+console.log("DEBUG: VERIFY ERROR:",e)
 
 res.json({success:false,message:"Verification error"})
 
