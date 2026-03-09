@@ -11,43 +11,50 @@
   --green:#1faa59;
   --dark:#222;
 }
-*{ box-sizing:border-box; margin:0; padding:0; }
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
 
 body{
-  font-family:Arial, sans-serif;
-  background:#fff;
-  color:#333;
+font-family:Arial, sans-serif;
+background:#fff;
+color:#333;
 }
 
 /* HEADER */
+
 header{
-  display:flex;
-  justify-content:flex-end;
-  align-items:center;
-  padding:18px 20px;
+display:flex;
+justify-content:flex-end;
+align-items:center;
+padding:18px 20px;
 }
 
 .menu-btn{
-  font-size:26px;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  gap:6px;
-  font-weight:bold;
+font-size:26px;
+cursor:pointer;
+display:flex;
+align-items:center;
+gap:6px;
+font-weight:bold;
 }
 
 .menu-icon span{
-  display:block;
-  width:25px;
-  height:3px;
-  margin:4px 0;
+display:block;
+width:25px;
+height:3px;
+margin:4px 0;
 }
 
-.menu-icon span:nth-child(1){ background:#ff7a00; }
-.menu-icon span:nth-child(2){ background:#1faa59; }
-.menu-icon span:nth-child(3){ background:#e10600; }
+.menu-icon span:nth-child(1){background:#ff7a00;}
+.menu-icon span:nth-child(2){background:#1faa59;}
+.menu-icon span:nth-child(3){background:#e10600;}
 
 /* HERO */
+
 .hero{
 text-align:center;
 padding:120px 20px;
@@ -77,28 +84,30 @@ cursor:pointer;
 }
 
 /* SIDE MENU */
+
 .side-menu{
-  position:fixed;
-  top:0;
-  right:-70%;
-  width:70%;
-  height:100%;
-  background:#fff;
-  box-shadow:-5px 0 20px rgba(0,0,0,.15);
-  padding:30px 20px;
-  transition:.3s;
-  z-index:10;
+position:fixed;
+top:0;
+right:-70%;
+width:70%;
+height:100%;
+background:#fff;
+box-shadow:-5px 0 20px rgba(0,0,0,.15);
+padding:30px 20px;
+transition:.3s;
+z-index:10;
 }
 
 .side-menu a{
-  display:block;
-  margin-bottom:22px;
-  font-size:18px;
-  color:#222;
-  text-decoration:none;
+display:block;
+margin-bottom:22px;
+font-size:18px;
+color:#222;
+text-decoration:none;
 }
 
-/* LOGIN PAGE */
+/* LOGIN */
+
 .login-page{
 display:none;
 padding:40px 20px;
@@ -145,7 +154,8 @@ margin-top:10px;
 font-size:14px;
 }
 
-/* REGISTER PAGE */
+/* REGISTER */
+
 .register-page{
 display:none;
 padding:40px 20px;
@@ -199,10 +209,12 @@ margin-bottom:10px;
 color:red;
 font-size:13px;
 }
+
 .success{
 color:green;
 font-size:13px;
 }
+
 </style>
 </head>
 
@@ -269,7 +281,6 @@ MENU
 <input type="checkbox" id="terms"> I accept terms
 </label>
 
-<!-- FIXED BUTTON -->
 <button type="submit" class="register-btn">Create my account</button>
 
 </form>
@@ -293,47 +304,44 @@ Already have an account?
 
 <script>
 
-function toggleMenu(){
+document.addEventListener("DOMContentLoaded",function(){
+
+console.log("DEBUG: Page Loaded")
+
+window.toggleMenu=function(){
 console.log("DEBUG: Menu toggled")
-const m = document.getElementById("menu");
-m.style.right = (m.style.right==="0px") ? "-70%" : "0px";
+const m=document.getElementById("menu")
+m.style.right=(m.style.right==="0px")?"-70%":"0px"
 }
 
-function openLogin(){
-console.log("DEBUG: Open login page")
-document.getElementById("hero").style.display="none";
-document.getElementById("registerPage").style.display="none";
-document.getElementById("loginPage").style.display="block";
-document.getElementById("menu").style.right="-70%";
+window.openLogin=function(){
+console.log("DEBUG: Open login")
+document.getElementById("hero").style.display="none"
+document.getElementById("registerPage").style.display="none"
+document.getElementById("loginPage").style.display="block"
+document.getElementById("menu").style.right="-70%"
 }
 
-function openRegister(){
-console.log("DEBUG: Open register page")
-document.getElementById("hero").style.display="none";
-document.getElementById("loginPage").style.display="none";
-document.getElementById("registerPage").style.display="block";
-document.getElementById("menu").style.right="-70%";
+window.openRegister=function(){
+console.log("DEBUG: Open register")
+document.getElementById("hero").style.display="none"
+document.getElementById("loginPage").style.display="none"
+document.getElementById("registerPage").style.display="block"
+document.getElementById("menu").style.right="-70%"
 }
 
-function backHome(){
-console.log("DEBUG: Back to home")
-document.getElementById("registerPage").style.display="none";
-document.getElementById("loginPage").style.display="none";
-document.getElementById("hero").style.display="block";
-}
-
-const password = document.getElementById("password")
-const strength = document.getElementById("strength")
+const password=document.getElementById("password")
+const strength=document.getElementById("strength")
 
 password.addEventListener("input",function(){
 
-const value = password.value
+const value=password.value
 
-const hasUpper = /[A-Z]/.test(value)
-const hasLower = /[a-z]/.test(value)
-const hasNumber = /[0-9]/.test(value)
+const hasUpper=/[A-Z]/.test(value)
+const hasLower=/[a-z]/.test(value)
+const hasNumber=/[0-9]/.test(value)
 
-if(value.length < 6){
+if(value.length<6){
 strength.innerHTML="<span class='error'>Weak password</span>"
 }
 else if(hasUpper && hasLower && hasNumber){
@@ -366,16 +374,14 @@ alert("Passwords do not match")
 return
 }
 
-const formData = new FormData(this)
-const data = Object.fromEntries(formData)
+const formData=new FormData(this)
+const data=Object.fromEntries(formData)
 
-console.log("DEBUG: Form data collected",data)
+console.log("DEBUG: Sending data",data)
 
 try{
 
-console.log("DEBUG: Sending request to /register")
-
-const res = await fetch("/register",{
+const res=await fetch("/register",{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
@@ -383,27 +389,25 @@ headers:{
 body:JSON.stringify(data)
 })
 
-console.log("DEBUG: Waiting server response")
-
-const result = await res.json()
+const result=await res.json()
 
 console.log("DEBUG: Server response",result)
 
 alert(result.message)
 
-/* FIXED REDIRECT */
-if(result.message === "Account created. OTP sent to your email."){
-console.log("DEBUG: Redirecting to verify page")
-window.location = "verify.html"
+if(result.message==="Account created. OTP sent to your email."){
+window.location="verify.html"
 }
 
 }catch(err){
 
-console.log("DEBUG: Frontend error",err)
+console.log("DEBUG ERROR",err)
 
-alert("Server error. Try again.")
+alert("Server error")
 
 }
+
+})
 
 })
 
